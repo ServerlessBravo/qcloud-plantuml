@@ -50,7 +50,8 @@ Gateway <-- EventFunction: handle successfully
 
 架构图：
 
-![]
+![webapp](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/master/examples/apigw_trigger_func.puml)
+
 
 ## Reference
 
