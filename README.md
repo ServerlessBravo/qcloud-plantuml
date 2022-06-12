@@ -34,17 +34,19 @@ left to right direction
 !includeurl QcloudPuml/Qcloud_APIGateway.puml
 !includeurl QcloudPuml/Qcloud_CloudObjectStorage.puml
 
+actor "Person" as personAlias
+
 Qcloud_ServerlessCloudFunction(EventFunction, "webapp", "Tencent", "Convert data into json format")
-Qcloud_APIGateway(Gateway, "webapp", "Tencent", "Expose http/https protocols")
+Qcloud_APIGateway(APIGateway, "webapp", "Tencent", "Expose http/https protocols")
 Qcloud_CloudObjectStorage(COS, "webapp", "Tencent", "Save users data as json")
 
 
-Gateway ->  EventFunction: Trigger Function as user requests
-EventFunction ->  COS: Save data into cos
-EventFunction <-- COS: Save data successfully
-Gateway <-- EventFunction: handle successfully
+personAlias --> APIGateway
+APIGateway -->  EventFunction: Trigger Function as user requests
+EventFunction -->  COS: Save data into cos
 
 @enduml
+
 
 ```
 
