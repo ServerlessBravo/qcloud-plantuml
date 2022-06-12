@@ -65,6 +65,38 @@ EventFunction -->  COS: Save data into cos
 ![webapp](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/master/examples/apigw_trigger_func.puml)
 
 
+## Example with EventBridge
+
+```plantuml
+@startuml
+
+left to right direction
+
+!define QcloudPuml https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/release/v1.1/dist
+
+!includeurl QcloudPuml/QcloudCommon.puml
+!includeurl QcloudPuml/Qcloud_APIGateway.puml
+!includeurl QcloudPuml/Qcloud_EventBridge.puml
+!includeurl QcloudPuml/Qcloud_ServerlessCloudFunction.puml
+
+actor "Person" as personAlias
+
+Qcloud_ServerlessCloudFunction(SCF, "app=streaming", "Tencent", "Customized ETL logic")
+Qcloud_APIGateway(APIGateway, "app=streaming", "Tencent", "Expose http/https protocols")
+Qcloud_EventBridge(EventBridge, "app=streaming", "Tencent", "Event Routing and Event Filtering")
+
+
+personAlias --> APIGateway: Trigger by url
+APIGateway --> EventBridge: Ingest data into EventBridge
+EventBridge --> SCF: Trigger SCF Function to process
+
+@enduml
+```
+
+架构图：
+
+![webapp](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/master/examples/eb_trigger_func.puml)
+
 ## Reference
 
 - Azure PlantUML: [Link](https://github.com/plantuml-stdlib/Azure-PlantUML)

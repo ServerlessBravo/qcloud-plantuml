@@ -1,0 +1,23 @@
+@startuml
+
+left to right direction
+
+!define QcloudPuml https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/release/v1.1/dist
+
+!includeurl QcloudPuml/QcloudCommon.puml
+!includeurl QcloudPuml/Qcloud_APIGateway.puml
+!includeurl QcloudPuml/Qcloud_EventBridge.puml
+!includeurl QcloudPuml/Qcloud_ServerlessCloudFunction.puml
+
+actor "Person" as personAlias
+
+Qcloud_ServerlessCloudFunction(SCF, "app=streaming", "Tencent", "Customized ETL logic")
+Qcloud_APIGateway(APIGateway, "app=streaming", "Tencent", "Expose http/https protocols")
+Qcloud_EventBridge(EventBridge, "app=streaming", "Tencent", "Event Routing and Event Filtering")
+
+
+personAlias --> APIGateway: Trigger by url
+APIGateway --> EventBridge: Ingest data into EventBridge
+EventBridge --> SCF: Trigger SCF Function to process
+
+@enduml
