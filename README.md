@@ -19,6 +19,16 @@ brew install --cask inkscape
 ./generate.sh
 ```
 
+## Add missing icons
+
+```bash
+mkdir -p tmp_icons
+## add missing scv icons in 
+./single_generation.sh
+## ensure umls generated at dist
+rm -rf tmp_icons
+```
+
 
 ## Example Usage
 

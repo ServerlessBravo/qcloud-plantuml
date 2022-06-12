@@ -152,3 +152,4 @@ cython_debug/
 vendor
 .vscode
 .DS_Store
+tmp_icons
