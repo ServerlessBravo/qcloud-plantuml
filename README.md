@@ -37,7 +37,7 @@ rm -rf tmp_icons
 
 left to right direction
 
-!define QcloudPuml https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/release/v1.0/dist
+!define QcloudPuml https://raw.githubusercontent.com/ServerlessBravo/qcloud-plantuml/release/v1.1/dist
 
 !includeurl QcloudPuml/QcloudCommon.puml
 !includeurl QcloudPuml/Qcloud_ServerlessCloudFunction.puml
