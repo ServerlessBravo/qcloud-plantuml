@@ -84,7 +84,7 @@ main () {
 
     # Get mandatory argument
     shift $(($OPTIND-1))
-    prefix=$(     echo $1 | tr '[:upper:]' '[:lower:]')
+    prefix=$(     echo $1 | sed -r 's/(^|-)(\w)/\U\2/g') # Camel Case
     prefixupper=$(echo $1 | tr '[:lower:]' '[:upper:]')
 
     # Check mandatory argument
@@ -129,7 +129,10 @@ process_svg () {
     do
         [ -f "$i" ] || continue
       
-        inkscape_command="inkscape -z --export-png=`echo $i | sed -e 's/svg$/png/' | sed 's/[^a-zA-Z0-9._]/_/g'` -w $width -h $height -b white $i"
+        filename=$(echo $i | sed -e 's/.svg$//')                 # Filename without extension
+        pngfilename=`echo ${prefix}_$filename.png | sed 's/[^a-zA-Z0-9._]/_/g'` # png file name
+
+        inkscape_command="inkscape -z --export-png=$pngfilename -w $width -h $height -b white $i"
         echo "inkscape command to run: $inkscape_command"
         $inkscape_command
     done
@@ -149,27 +152,20 @@ process_png () {
 
                filename=$(echo $i | sed -e 's/.png$//')                 # Filename without extension
           filenameupper=$(echo $filename | tr '[:lower:]' '[:upper:]')  # Filename without extension in uppercase
-             spritename="${prefix}_$filename"                           # Sprite name is composed by prefix_filename
+             spritename=$filename                                       #  Sprite name is composed by prefix_filename
         spritenameupper="${prefixupper}_$filenameupper"                 # Sprite name in uppercase
            spritestereo="$prefixupper $filenameupper"                   # Sprite stereotype is uppercase prefix followed by uppercase filename
            stereowhites=$(echo $spritestereo | sed -e 's/./ /g')        # This is just whitespace to make output nicer
 
-        #echo "@startuml" >> $filename.puml
 
-        java_command="java -jar ../plantuml-1.2022.5.jar -encodesprite $graylevel $i | sed '1!b;s/\$/$'${prefix}_'/'"
-        echo "Java plantuml command to run: $java_command"
+        java_command="java -jar ../plantuml-1.2022.5.jar -encodesprite $graylevel $i"
+        echo "java command to run: $java_command"
         echo -e "$($java_command)\n" >> $filename.puml
 
-        echo "!define $spritenameupper(_color)                                 SPRITE_PUT(          $stereowhites          $spritename, _color)"                 >> $filename.puml
-        echo "!define $spritenameupper(_color, _scale)                         SPRITE_PUT(          $stereowhites          $spritename, _color, _scale)"         >> $filename.puml
-
-        echo "!define $spritenameupper(_color, _scale, _alias)                 SPRITE_ENT(  _alias, $spritestereo,         $spritename, _color, _scale)"         >> $filename.puml
-        echo "!define $spritenameupper(_color, _scale, _alias, _shape)         SPRITE_ENT(  _alias, $spritestereo,         $spritename, _color, _scale, _shape)" >> $filename.puml
-        echo "!define $spritenameupper(_color, _scale, _alias, _shape, _label) SPRITE_ENT_L(_alias, $spritestereo, _label, $spritename, _color, _scale, _shape)" >> $filename.puml
-        
-        echo "skinparam folderBackgroundColor<<$prefixupper $filenameupper>> White"                                                                              >> $filename.puml
-        
-        #echo "@enduml" >> $filename.puml
+        echo "QcloudEntityColoring($spritename)" >> $filename.puml
+        echo "!define $spritename(e_alias, e_label, e_techn) QcloudEntity(e_alias, e_label, e_techn, QCLOUD_SYMBOL_COLOR, $spritename, $spritename)" >> $filename.puml
+        echo "!define $spritename(e_alias, e_label, e_techn, e_descr) QcloudEntity(e_alias, e_label, e_techn, e_descr, QCLOUD_SYMBOL_COLOR, $spritename, $spritename)" >> $filename.puml
+ 
     done
 }
 

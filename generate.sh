@@ -10,7 +10,11 @@ echo 'cleaning files in qcloudicons'
 rm -rf ./qcloudicons/*.png
 rm -rf ./qcloudicons/*.puml
 
-./create_sprites.sh -p ./qcloudicons -w 48 -h 48 -s QCloud
+echo 'begin to copy shared pumls'
+
+cp ./QcloudCommon.puml ./dist
+
+./create_sprites.sh -p ./qcloudicons -w 48 -h 48 -s Qcloud
 
 mv ./qcloudicons/*.puml dist/
 
